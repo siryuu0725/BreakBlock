@@ -64,11 +64,11 @@ void HitBall()
 		balldata.speedflg_y = true;
 		balldata.speedflg_x = true;
 	}
-	if (Hit(0, block.height) == true)
+	/*if (Hit(0, block.height) == true)
 	{
 		balldata.speedflg_y = true;
 		balldata.speedflg_x = true;
-	}
+	}*/
 }
 
 //ƒvƒŒƒCƒ„[‘€ì
