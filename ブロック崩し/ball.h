@@ -8,9 +8,9 @@ typedef struct
 	float center_y;
 	float radius;
 	float speed;
+	
 	bool speedflg_x;
 	bool speedflg_y;
-	
 }BallData;
 extern BallData balldata;
 

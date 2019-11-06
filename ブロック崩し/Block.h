@@ -8,6 +8,9 @@ typedef struct
 	float pos_y;
 	float width;
 	float height;
+	int next_hitcount;
+	bool next_hit;
+
 }Blockdata;
 
 extern Blockdata block;

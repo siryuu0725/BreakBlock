@@ -12,7 +12,8 @@ void InitBlock()
 	block.pos_y = 500.0f;
 	block.height = 80.0f;
 	block.width = 240.0f;
-
+	block.next_hitcount = 0;
+	block.next_hit = false;
 }
 
 void DrawBlock()
@@ -22,53 +23,131 @@ void DrawBlock()
 
 void HitBall()
 {
-	
+	if (block.next_hit == true)
+	{
+		block.next_hitcount++;
+	}
+	if (block.next_hitcount == 60)
+	{
+		block.next_hitcount = 0;
+		block.next_hit = false;
+	}
 	//上反射
 	if (balldata.center_x >= block.pos_x && balldata.center_x <= block.pos_x + block.width
-		&& balldata.center_y >= block.pos_y - balldata.radius && balldata.center_y <= block.pos_y)
+		&& balldata.center_y >= block.pos_y - balldata.radius && balldata.center_y <= block.pos_y && block.next_hit == false)
 	{
 		balldata.speedflg_y = true;
+		block.next_hit = true;
+
 	}
 	//下反射
 	if (balldata.center_x >= block.pos_x && balldata.center_x <= block.pos_x + block.width
-		&& balldata.center_y >= block.pos_y + block.height && balldata.center_y <= block.pos_y + block.height + balldata.radius)
+		&& balldata.center_y >= block.pos_y + block.height && balldata.center_y <= block.pos_y + block.height + balldata.radius && block.next_hit == false)
 	{
 		balldata.speedflg_y = false;
+		block.next_hit = true;
+
 	}
 	//右反射
 	if (balldata.center_x >= block.pos_x - balldata.radius && balldata.center_x <= block.pos_x
-		&& balldata.center_y >= block.pos_y && balldata.center_y <= block.pos_y + block.height)
+		&& balldata.center_y >= block.pos_y && balldata.center_y <= block.pos_y + block.height && block.next_hit == false)
 	{
 		balldata.speedflg_x = true;
+		block.next_hit = true;
+
 	}
 	//左反射
 	if (balldata.center_x >= block.pos_x + block.width && balldata.center_x <= block.pos_x + block.width + balldata.radius
-		&& balldata.center_y >= block.pos_y && balldata.center_y <= block.pos_y + block.height)
+		&& balldata.center_y >= block.pos_y && balldata.center_y <= block.pos_y + block.height && block.next_hit == false)
 	{
 		balldata.speedflg_x = false;
+		block.next_hit = true;
+
 	}	
 
-	if (Hit(0, 0) == true)
+	//左頂点
+	if (Hit(0, 0) == true && balldata.center_x < block.pos_x && balldata.center_y < block.pos_y && block.next_hit == false)
 	{
 		balldata.speedflg_y = true;
 		balldata.speedflg_x = true;
+		block.next_hit = true;
+	}
+	else if (Hit(0, 0) == true && balldata.center_x < block.pos_x && balldata.center_y > block.pos_y&& block.next_hit == false)
+	{
+		balldata.speedflg_x = true;
+		block.next_hit = true;
+
+	}
+	else if (Hit(0, 0) == true && balldata.center_x > block.pos_x&& balldata.center_y < block.pos_y && block.next_hit == false)
+	{
+		balldata.speedflg_y = false;
+		block.next_hit = true;
+
+	}
+	
+
+	//右頂点
+	else if (Hit(block.width, 0) == true && balldata.center_x > block.pos_x&& balldata.pos_y < block.pos_y && block.next_hit == false)
+	{
+		balldata.speedflg_y = true;
+		balldata.speedflg_x = false;
+		block.next_hit = true;
+
+	}
+	else if (Hit(block.width, 0) == true && balldata.center_x > block.pos_x&& balldata.pos_y > block.pos_y && block.next_hit == false)
+	{
+		balldata.speedflg_x = false;
+		block.next_hit = true;
+
+	}
+	else if (Hit(block.width, 0) == true && balldata.center_x < block.pos_x&& balldata.pos_y < block.pos_y && block.next_hit == false)
+	{
+		balldata.speedflg_y = false;
+		block.next_hit = true;
+
 	}
 
-	if (Hit(block.width, 0) == true)
+	//右下頂点
+	else if (Hit(block.width, block.height) == true && balldata.center_x > block.pos_x&& balldata.pos_y > block.pos_y && block.next_hit == false)
 	{
-		balldata.speedflg_y = true;
-		balldata.speedflg_x = true;
+		balldata.speedflg_y = false;
+		balldata.speedflg_x = false;
+		block.next_hit = true;
+
 	}
-	if (Hit(block.width, block.height) == true)
+	else if (Hit(block.width, block.height) == true && balldata.center_x > block.pos_x&& balldata.pos_y < block.pos_y && block.next_hit == false)
 	{
-		balldata.speedflg_y = true;
-		balldata.speedflg_x = true;
+		balldata.speedflg_x = false;
+		block.next_hit = true;
+
 	}
-	/*if (Hit(0, block.height) == true)
+	else if (Hit(block.width, block.height) == true && balldata.center_x < block.pos_x&& balldata.pos_y > block.pos_y && block.next_hit == false)
 	{
 		balldata.speedflg_y = true;
+		block.next_hit = true;
+
+	}
+
+	//左下頂点
+	else if (Hit(0, block.height) == true && balldata.center_x < block.pos_x&& balldata.pos_y > block.pos_y&& block.next_hit == false)
+	{
+		balldata.speedflg_y = false;
 		balldata.speedflg_x = true;
-	}*/
+		block.next_hit = true;
+
+	}
+	else if (Hit(0, block.height) == true && balldata.center_x < block.pos_x&& balldata.pos_y < block.pos_y&& block.next_hit == false)
+	{
+		balldata.speedflg_x = true;
+		block.next_hit = true;
+
+	}
+	else if (Hit(0, block.height) == true && balldata.center_x > block.pos_x&& balldata.pos_y > block.pos_y&& block.next_hit == false)
+	{
+		balldata.speedflg_y = true;
+		block.next_hit = true;
+
+	}
 }
 
 //プレイヤー操作
